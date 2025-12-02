@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} – Nava Organics{% endblock %}
+{% block content %}
+<section class="section product-detail-page">
+  <div class="product-detail">
+    <div class="product-detail-image placeholder"></div>
+    <div class="product-detail-info">
+      <h1>{{ product.name }}</h1>
+      <p class="product-category">{{ product.category|capitalize }}</p>
+      <p class="product-description">{{ product.description }}</p>
+
+      <div class="how-to-use-box">
+        <h3>How to Use</h3>
+        <ul>
+          <li>Apply on clean skin/hair as required.</li>
+          <li>Use gentle circular motions.</li>
+          <li>Rinse or leave on as preferred. (Edit this text later.)</li>
+        </ul>
+      </div>
+
+      <form action="{{ url_for('add_to_cart') }}" method="post" id="detail-cart-form" data-base-price="{{ product.base_price }}" data-secondary-price="{{ product.secondary_price or '' }}">
+        <input type="hidden" name="product_id" value="{{ product.id }}" />
+
+        {% if product.category == 'serum' %}
+          <div class="form-group inline">
+            <label for="variant">Quantity / Size</label>
+            <select id="variant" name="variant">
+              <option value="15ml" data-price="{{ product.base_price }}">{{ product.base_volume }} – ₹{{ product.base_price }}</option>
+              {% if product.secondary_price %}
+                <option value="30ml" data-price="{{ product.secondary_price }}">{{ product.secondary_volume }} – ₹{{ product.secondary_price }}</option>
+              {% endif %}
+            </select>
+          </div>
+        {% else %}
+          <p class="volume-label">{{ product.base_volume }}</p>
+        {% endif %}
+
+        <div class="form-group inline">
+          <label for="quantity">Quantity</label>
+          <input type="number" id="quantity" name="quantity" value="1" min="1" />
+        </div>
+
+        <p class="dynamic-price">Total: ₹<span id="dynamic-price-value">{{ product.base_price }}</span></p>
+
+        <div class="product-actions">
+          {% if current_user %}
+            <button type="submit" class="btn primary">Add to Cart</button>
+            <a href="{{ url_for('toggle_favourite', product_id=product.id) }}" class="btn ghost">❤ Add to Favourite</a>
+          {% else %}
+            <a href="{{ url_for('login') }}" class="btn primary">Login to add to cart</a>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+  window.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('detail-cart-form');
+    if (!form) return;
+    const qtyInput = document.getElementById('quantity');
+    const variantSelect = document.getElementById('variant');
+    const priceSpan = document.getElementById('dynamic-price-value');
+
+    function updatePrice() {
+      let unitPrice = parseInt(form.dataset.basePrice, 10) || 0;
+      if (variantSelect) {
+        const selected = variantSelect.options[variantSelect.selectedIndex];
+        const attr = selected.getAttribute('data-price');
+        if (attr) unitPrice = parseInt(attr, 10) || unitPrice;
+      }
+      const qty = parseInt(qtyInput.value, 10) || 1;
+      priceSpan.textContent = unitPrice * qty;
+    }
+
+    qtyInput.addEventListener('input', updatePrice);
+    if (variantSelect) variantSelect.addEventListener('change', updatePrice);
+    updatePrice();
+  });
+</script>
+{% endblock %}

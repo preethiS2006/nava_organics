@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Admin Products – Nava Organics{% endblock %}
+{% block content %}
+<section class="section">
+  <h1 class="section-title">Manage Products</h1>
+  <a href="{{ url_for('admin_product_new') }}" class="btn primary">Add Product</a>
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Base Price</th>
+        <th>Base Volume</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in products %}
+        <tr>
+          <td>{{ p.id }}</td>
+          <td>{{ p.name }}</td>
+          <td>{{ p.category }}</td>
+          <td>₹{{ p.base_price }}</td>
+          <td>{{ p.base_volume }}</td>
+          <td>
+            <a href="{{ url_for('admin_product_edit', product_id=p.id) }}" class="btn ghost">Edit</a>
+            <form action="{{ url_for('admin_product_delete', product_id=p.id) }}" method="post" style="display:inline;">
+              <button type="submit" class="btn ghost" onclick="return confirm('Delete this product?');">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

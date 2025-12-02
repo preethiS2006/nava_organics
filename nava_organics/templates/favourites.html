@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Favourites – Nava Organics{% endblock %}
+{% block content %}
+<section class="section">
+  <h1 class="section-title">Your Favourites</h1>
+  <div class="product-grid">
+    {% for p in products %}
+      <div class="product-card">
+        <a href="{{ url_for('product_detail', product_id=p.id) }}">
+          <div class="product-image placeholder"></div>
+          <h3>{{ p.name }}</h3>
+        </a>
+        <p class="product-price">₹{{ p.base_price }}</p>
+        <div class="product-actions">
+          {% if current_user and not current_user.is_admin %}
+            <form action="{{ url_for('add_to_cart') }}" method="post">
+              <input type="hidden" name="product_id" value="{{ p.id }}" />
+              <input type="hidden" name="quantity" value="1" />
+              <button type="submit" class="btn primary">Add to Cart</button>
+            </form>
+            <a href="{{ url_for('toggle_favourite', product_id=p.id) }}" class="btn ghost">Remove</a>
+          {% elif not current_user %}
+            <a href="{{ url_for('login') }}" class="btn primary">Login to buy</a>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <p>You have no favourites yet.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

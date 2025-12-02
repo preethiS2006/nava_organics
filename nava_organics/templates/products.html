@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Nava Organics – Products{% endblock %}
+{% block content %}
+<section class="section">
+  <h1 class="section-title">Our Products</h1>
+  <div class="tabs">
+    <a href="{{ url_for('products', category='all') }}" class="tab {% if active_category == 'all' %}active{% endif %}">All</a>
+    <a href="{{ url_for('products', category='soap') }}" class="tab {% if active_category == 'soap' %}active{% endif %}">Soaps</a>
+    <a href="{{ url_for('products', category='shampoo') }}" class="tab {% if active_category == 'shampoo' %}active{% endif %}">Shampoos</a>
+    <a href="{{ url_for('products', category='serum') }}" class="tab {% if active_category == 'serum' %}active{% endif %}">Face Serums</a>
+    <a href="{{ url_for('products', category='haircare') }}" class="tab {% if active_category == 'haircare' %}active{% endif %}">Hair Care</a>
+  </div>
+  <div class="product-grid">
+    {% for p in products %}
+      <div class="product-card">
+        <a href="{{ url_for('product_detail', product_id=p.id) }}">
+          <div class="product-image placeholder"></div>
+          <h3>{{ p.name }}</h3>
+        </a>
+        <p class="product-price">₹{{ p.base_price }}</p>
+        <p class="product-category">{{ p.category|capitalize }}</p>
+        <div class="product-actions">
+          {% if current_user and not current_user.is_admin %}
+            <form action="{{ url_for('add_to_cart') }}" method="post">
+              <input type="hidden" name="product_id" value="{{ p.id }}" />
+              <input type="hidden" name="quantity" value="1" />
+              <button type="submit" class="btn primary">Add to Cart</button>
+            </form>
+            <a href="{{ url_for('toggle_favourite', product_id=p.id) }}" class="btn ghost">❤ Favourite</a>
+          {% elif not current_user %}
+            <a href="{{ url_for('login') }}" class="btn primary">Login to buy</a>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <p>No products found.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

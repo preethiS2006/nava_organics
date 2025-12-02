@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Register – Nava Organics{% endblock %}
+{% block content %}
+<section class="section auth-section">
+  <div class="form-card">
+    <h1>Register</h1>
+    <form method="post">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input id="name" name="name" required />
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required />
+      </div>
+      <button type="submit" class="btn primary">Create Account</button>
+    </form>
+    <p class="auth-switch">Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+  </div>
+</section>
+{% endblock %}

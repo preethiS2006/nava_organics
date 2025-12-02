@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}My Orders – Nava Organics{% endblock %}
+{% block content %}
+<section class="section">
+  <h1 class="section-title">My Orders</h1>
+  {% if not orders %}
+    <p>You have no orders yet.</p>
+  {% else %}
+    <div class="admin-table">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Payment</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for o in orders %}
+            <tr>
+              <td>{{ o.id }}</td>
+              <td>{{ o.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+              <td>₹{{ o.total_amount }}</td>
+              <td>{{ o.status }}</td>
+              <td>{{ o.payment_status }}</td>
+              <td>
+                <a href="{{ url_for('order_status', order_id=o.id) }}" class="btn ghost">Track</a>
+                <a href="{{ url_for('receipt', order_id=o.id) }}" class="btn ghost">Receipt</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+  <div style="margin-top:1rem;">
+    <h4>Contact</h4>
+    <p>Phone: +91-8870941728</p>
+    <p>Email: navaorganics@gmail.com</p>
+    <p>Follow: <a href="https://www.instagram.com/nava_secrets?igsh=eWZ0Mmlwa2RhZzFi" target="_blank" rel="noopener">nava_secrets</a></p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard – Nava Organics{% endblock %}
+{% block content %}
+<section class="section">
+  <h1 class="section-title">Admin Dashboard</h1>
+  <div class="admin-grid">
+    <a href="{{ url_for('admin_products') }}" class="admin-card">
+      <h2>Products</h2>
+      <p>Total: {{ product_count }}</p>
+    </a>
+    <a href="{{ url_for('admin_orders') }}" class="admin-card">
+      <h2>Orders</h2>
+      <p>Total: {{ order_count }}</p>
+    </a>
+    <a href="{{ url_for('admin_offers') }}" class="admin-card">
+      <h2>Offers</h2>
+      <p>Total: {{ offer_count }}</p>
+    </a>
+  </div>
+</section>
+{% endblock %}

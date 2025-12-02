@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Payment – Nava Organics{% endblock %}
+{% block content %}
+<section class="section">
+  <h1 class="section-title">Payment</h1>
+  <div class="form-card">
+    <p>Order #{{ order.id }}</p>
+    <p>Total Amount: ₹{{ order.total_amount }}</p>
+    <p>Current Payment Status: {{ order.payment_status }}</p>
+    {% if order.account_number %}
+      <p>Account Number (provided): {{ order.account_number }}</p>
+      <p>Card Type: {{ order.card_type }}</p>
+    {% endif %}
+  </div>
+
+  <div class="form-card">
+    <h2>Enter Payment Details</h2>
+    <form method="post" id="payment-form">
+      <div class="form-group">
+        <label for="card_type">Card Type</label>
+        <select id="card_type" name="card_type" required>
+          <option value="">Select type</option>
+          <option value="Debit Card">Debit Card</option>
+          <option value="Credit Card">Credit Card</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="account_number">Account Number (12 digits)</label>
+        <input id="account_number" name="account_number" maxlength="12" minlength="12" pattern="\d{12}" required />
+      </div>
+      <div class="form-group">
+        <label for="pin">PIN (4 digits)</label>
+        <input id="pin" name="pin" type="password" maxlength="4" minlength="4" pattern="\d{4}" required />
+      </div>
+      <button type="submit" class="btn primary">Pay</button>
+    </form>
+
+    {% if success %}
+      <div class="payment-success">
+        <div class="tick-circle">
+          <div class="tick-mark"></div>
+        </div>
+        <p class="payment-success-text">Payment Successful</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+  // simple front-end validation helper (HTML attributes already enforce patterns)
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('payment-form');
+    if (!form) return;
+    form.addEventListener('submit', function (e) {
+      const acc = document.getElementById('account_number').value.trim();
+      const pin = document.getElementById('pin').value.trim();
+      if (!/^\d{12}$/.test(acc)) {
+        alert('Account number must be exactly 12 digits.');
+        e.preventDefault();
+      } else if (!/^\d{4}$/.test(pin)) {
+        alert('PIN must be exactly 4 digits.');
+        e.preventDefault();
+      }
+    });
+  });
+</script>
+{% endblock %}

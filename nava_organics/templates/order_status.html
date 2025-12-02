@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Order Status – Nava Organics{% endblock %}
+{% block content %}
+<section class="section">
+  <h1 class="section-title">Order Tracking</h1>
+  <div class="form-card">
+    <p>Order #{{ order.id }}</p>
+    <p>Status: {{ order.status }}</p>
+    <p>Payment: {{ order.payment_status }}</p>
+  </div>
+  <div class="timeline">
+    {% for step in steps %}
+      <div class="timeline-step {% if loop.index0 <= current_index %}active{% endif %}">
+        <div class="bullet"></div>
+        <span>{{ step }}</span>
+      </div>
+    {% endfor %}
+  </div>
+  {% if delivered_message %}
+    <p class="delivered-message">{{ delivered_message }}</p>
+  {% endif %}
+  {% if current_user and not current_user.is_admin and order.user_id == current_user.id and order.status == 'Order Dispatched' %}
+    <form method="post" action="{{ url_for('user_order_reached', order_id=order.id) }}" style="margin-top:1rem;">
+      <button type="submit" class="btn primary">Mark as Reached</button>
+    </form>
+  {% endif %}
+</section>
+{% endblock %}

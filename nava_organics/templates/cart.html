@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Your Cart – Nava Organics{% endblock %}
+{% block content %}
+<section class="section">
+  <h1 class="section-title">Your Cart</h1>
+  {% if not cart_items %}
+    <p>Your cart is empty.</p>
+  {% else %}
+    <div class="cart-table">
+      {% for item in cart_items %}
+        <div class="cart-row">
+          <div>
+            <h3>{{ item.product_name }}</h3>
+            <p class="muted">{{ item.variant_label }}</p>
+          </div>
+          <div>
+            <p>₹{{ item.unit_price }} × {{ item.quantity }}</p>
+          </div>
+          <div>
+            <p>₹{{ item.line_total }}</p>
+          </div>
+          <div>
+            <a href="{{ url_for('remove_from_cart', index=loop.index0) }}" class="btn ghost">Remove</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="cart-summary">
+      <p><strong>Total: ₹{{ total }}</strong></p>
+      {% if current_user and not current_user.is_admin %}
+        <a href="{{ url_for('checkout') }}" class="btn primary">Proceed to Checkout</a>
+      {% endif %}
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

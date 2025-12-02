@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Admin Offers – Nava Organics{% endblock %}
+{% block content %}
+<section class="section">
+  <h1 class="section-title">Manage Offers</h1>
+  <div class="form-card">
+    <h2>New Offer</h2>
+    <form method="post">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input id="title" name="title" required />
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="3" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="discount_percent">Discount (%)</label>
+        <input id="discount_percent" name="discount_percent" type="number" min="0" max="100" />
+      </div>
+      <div class="form-group inline">
+        <label><input type="checkbox" name="is_active" checked /> Active</label>
+      </div>
+      <button type="submit" class="btn primary">Create Offer</button>
+    </form>
+  </div>
+
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Discount</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for o in offers %}
+        <tr>
+          <td>{{ o.id }}</td>
+          <td>{{ o.title }}</td>
+          <td>{% if o.discount_percent %}{{ o.discount_percent }}%{% else %}-{% endif %}</td>
+          <td>{{ 'Active' if o.is_active else 'Inactive' }}</td>
+          <td>
+            <form action="{{ url_for('admin_offer_toggle', offer_id=o.id) }}" method="post">
+              <button type="submit" class="btn ghost">Toggle</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

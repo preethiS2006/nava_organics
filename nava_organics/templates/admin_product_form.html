@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Edit' if product else 'New' }} Product – Nava Organics{% endblock %}
+{% block content %}
+<section class="section">
+  <h1 class="section-title">{{ 'Edit' if product else 'New' }} Product</h1>
+  <div class="form-card">
+    <form method="post">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input id="name" name="name" value="{{ product.name if product else '' }}" required />
+      </div>
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+          {% set cat = product.category if product else '' %}
+          <option value="soap" {% if cat == 'soap' %}selected{% endif %}>Soap</option>
+          <option value="shampoo" {% if cat == 'shampoo' %}selected{% endif %}>Shampoo</option>
+          <option value="serum" {% if cat == 'serum' %}selected{% endif %}>Face Serum</option>
+          <option value="haircare" {% if cat == 'haircare' %}selected{% endif %}>Hair Care</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="base_price">Base Price (₹)</label>
+        <input id="base_price" name="base_price" type="number" min="0" value="{{ product.base_price if product else '' }}" required />
+      </div>
+      <div class="form-group">
+        <label for="base_volume">Base Volume / Size</label>
+        <input id="base_volume" name="base_volume" value="{{ product.base_volume if product else '' }}" />
+      </div>
+      <div class="form-group">
+        <label for="secondary_price">Secondary Price (for serums)</label>
+        <input id="secondary_price" name="secondary_price" type="number" min="0" value="{{ product.secondary_price if product and product.secondary_price else '' }}" />
+      </div>
+      <div class="form-group">
+        <label for="secondary_volume">Secondary Volume (for serums)</label>
+        <input id="secondary_volume" name="secondary_volume" value="{{ product.secondary_volume if product else '' }}" />
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="3">{{ product.description if product else '' }}</textarea>
+      </div>
+      <button type="submit" class="btn primary">Save</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

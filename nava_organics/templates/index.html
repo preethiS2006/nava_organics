@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Nava Organics – Home{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-text">
+    <h1>Nava Organics</h1>
+    <p>Pure Herbal Essentials crafted with love from Coimbatore, Annur.</p>
+    <div class="hero-actions">
+      <a href="{{ url_for('products', category='soap') }}" class="btn primary">Shop Soaps</a>
+      <a href="{{ url_for('products', category='shampoo') }}" class="btn outline">Shop Shampoos</a>
+      <a href="{{ url_for('products', category='serum') }}" class="btn outline">Shop Face Serums</a>
+      <a href="{{ url_for('products', category='haircare') }}" class="btn outline">Hair Care</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Shop by Category</h2>
+  <div class="category-grid">
+    <a href="{{ url_for('products', category='soap') }}" class="category-card">
+      <h3>Soaps</h3>
+      <p>Handcrafted herbal soaps for everyday nourishment.</p>
+    </a>
+    <a href="{{ url_for('products', category='shampoo') }}" class="category-card">
+      <h3>Shampoos</h3>
+      <p>Gentle cleansers for strong, healthy hair.</p>
+    </a>
+    <a href="{{ url_for('products', category='serum') }}" class="category-card">
+      <h3>Face Serums</h3>
+      <p>Targeted care for glowing, balanced skin.</p>
+    </a>
+    <a href="{{ url_for('products', category='haircare') }}" class="category-card">
+      <h3>Hair Care</h3>
+      <p>Botanical mists and treatments for your scalp and hair.</p>
+    </a>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Current Offers</h2>
+  <div class="offers-grid">
+    {% for offer in offers %}
+      <div class="offer-card">
+        <h3>{{ offer.title }}</h3>
+        <p>{{ offer.description }}</p>
+        {% if offer.discount_percent %}
+          <span class="offer-badge">{{ offer.discount_percent }}% OFF</span>
+        {% endif %}
+      </div>
+    {% else %}
+      <p>No active offers at the moment. Check back soon.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

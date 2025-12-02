@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Receipt – Nava Organics{% endblock %}
+{% block content %}
+<section class="section">
+  <h1 class="section-title">Payment Receipt</h1>
+  <div class="form-card">
+    <p>Order #{{ order.id }}</p>
+    <p>Total Amount: ₹{{ order.total_amount }}</p>
+    <p>Payment: {{ order.payment_status }}</p>
+    <div class="payment-success" style="margin-top:0.5rem;">
+      <div class="tick-circle">
+        <div class="tick-mark"></div>
+      </div>
+      <p class="payment-success-text">Payment Successful</p>
+    </div>
+  </div>
+
+  <div class="timeline" style="margin-top:1rem;">
+    {% for step in steps %}
+      <div class="timeline-step {% if loop.index0 <= current_index %}active{% endif %}">
+        <div class="bullet"></div>
+        <span>{{ step }}</span>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div style="margin-top:1rem; display:flex; gap:0.5rem;">
+    <a href="{{ url_for('order_status', order_id=order.id) }}" class="btn primary">Track Order</a>
+    <a href="{{ url_for('my_orders') }}" class="btn ghost">My Orders</a>
+  </div>
+</section>
+{% endblock %}
